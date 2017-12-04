@@ -1,36 +1,41 @@
+import PraiseButton from './index.es';
+const pariseButton = new PraiseButton();
+
 xtag.register('x-praise', {
-  content: '<div id="hands" >'+
-   ' <div class="pd ">'+
-      '<span class="hs1"></span>'+
-      '<span class="hs2"></span>'+
-      '<span class="hs3"></span>'+
-     ' <span class="hs4"></span>'+
-      '<span class="hs5"></span>'+
-      '<span class="hs6"></span>'+
-    '</div>'+
-    '<div id="add" class="hide" ><span >+1</span></div>'+
-  '</div>',
-  lifecycle:{
-    created: function(){},
-    inserted: function(){},
-    removed: function(){},
-    attributeChanged: function(){}
-  },
-  methods: {
-    someMethod: function(){}
-  },
-  accessors: {
-    someAccessor: {
-      // links to the 'some-accessor' attribute
-      attribute: {},
-      set: function(){},
-      get: function(){}
-    }
-  },
-  events: {
-    tap: function(){
-      console.log(1)
-    },
-    focus: function(){}
-  }
+                          content: '<div id="hands" >'+
+                                           ' <div class="pd ">'+
+                                              '<span class="hs1"></span>'+
+                                              '<span class="hs2"></span>'+
+                                              '<span class="hs3"></span>'+
+                                             ' <span class="hs4"></span>'+
+                                              '<span class="hs5"></span>'+
+                                              '<span class="hs6"></span>'+
+                                            '</div>'+
+                                            '<div id="add" class="hide" ><span >+1</span></div>'+
+                                          '</div>',
+                          methods: {
+                            parise: function(){
+                                let _this= this;
+                                pariseButton.addThumb();
+                                let add = _this.querySelector("#add");
+                                add.className = "show";
+                                setTimeout(function() {
+                                            add.className = "hide"
+                                        }, 800)
+                            }
+                          },
+                          events: {
+                            click: function(e){
+                              let _this = this;
+                                  if (e.path[2].id == "hands") {
+                                      let t = "";
+                                      if (t) {
+                                          clearTimeout(t);
+                                      }
+                                      t = setTimeout(() => {
+                                          _this.parise();
+                                      }, 500);
+                                  }
+                            }
+                          }
 });

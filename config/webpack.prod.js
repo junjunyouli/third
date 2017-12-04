@@ -1,6 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 const LiveReloadPlugin = require('webpack-livereload-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
 module.exports = {
 	  entry: {
 	  	index: [
@@ -26,7 +29,14 @@ module.exports = {
 		          presets: ["es2015","stage-0"]
 		        }
 		      }
-		    }
+		    },
+		    {
+		        test: /\.css$/,
+		        use: ExtractTextPlugin.extract({
+		          fallback: "style-loader",
+		          use: "css-loader"
+		        })
+		      }
 		  ]
 	},
 	  plugins:[
@@ -35,6 +45,23 @@ module.exports = {
 	  			NODE_ENV: '"prod"'
 	  		}
 	  	}),
+	  	new ExtractTextPlugin("public/css/[name]-[hash:5].css"),
+	  	 new webpack.optimize.UglifyJsPlugin({
+		    compress: {
+		      warnings: false,
+		      drop_console: false,
+		    }
+		  }),
+	  	 new webpack.optimize.CommonsChunkPlugin({
+			    name: 'vendor',
+			    filename: 'public/pages/common/[name]-[hash:5].js',
+		 }),
+	  	 new OptimizeCssAssetsPlugin({
+		      assetNameRegExp: /\.css$/g,
+		      cssProcessor: require('cssnano'),
+		      cssProcessorOptions: { discardComments: { removeAll: true } },
+		      canPrint: true
+		}),
 	  	new LiveReloadPlugin({appendScriptTag: true})
 	  ]
 };
